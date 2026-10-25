@@ -1,19 +1,18 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import AppointmentCard from './appointment-card';
 
-import { appointments as initialAppointments } from '../data/appointments';
+import { service } from '@ember/service';
 
 export default class AppointmentsPageComponent extends Component {
-  @tracked appointments = initialAppointments;
+  @service appointmentService;
 
   get filteredAppointments() {
     const query = (this.args.searchQuery ?? '').trim().toLowerCase();
     const status = this.args.selectedStatus ?? 'All';
 
-    return this.appointments.filter((appointment) => {
+    return this.appointmentService.getAll().filter((appointment) => {
       const matchesSearch =
         appointment.patient.toLowerCase().includes(query) ||
         appointment.service.toLowerCase().includes(query);
@@ -36,11 +35,7 @@ export default class AppointmentsPageComponent extends Component {
 
   @action
   updateAppointmentStatus(id, newStatus) {
-    this.appointments = this.appointments.map((appointment) =>
-      appointment.id === id
-        ? { ...appointment, status: newStatus }
-        : appointment,
-    );
+    this.appointmentService.update(id, { status: newStatus });
   }
 
   <template>

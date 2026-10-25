@@ -18,13 +18,16 @@
 
 
 
+
 import Route from '@ember/routing/route';
-import { appointments } from '../data/appointments';
+import { service } from '@ember/service';
 
 export default class AppointmentRoute extends Route {
+  @service appointmentService;
+
   model(params) {
-    const appointment = appointments.find(
-      (item) => String(item.id) === params.appointment_id,
+    const appointment = this.appointmentService.getById(
+      params.appointment_id,
     );
 
     if (!appointment) {
@@ -36,6 +39,7 @@ export default class AppointmentRoute extends Route {
     return appointment;
   }
 }
+
 
 
 
