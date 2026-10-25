@@ -23,8 +23,13 @@ export default class AppointmentService extends Service {
     );
   }
 
+  async simulateNetworkDelay() {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+
   // Create an appointment
-  create(attributes) {
+  async create(attributes) {
+    await this.simulateNetworkDelay();
     const nextId =
       this.appointments.reduce(
         (maxId, appointment) => Math.max(maxId, appointment.id),
@@ -42,7 +47,8 @@ export default class AppointmentService extends Service {
   }
 
   // Update an existing appointment
-  update(id, changes) {
+  async update(id, changes) {
+    await this.simulateNetworkDelay();
     const existing = this.getById(id);
 
     if (!existing) {
@@ -63,7 +69,8 @@ export default class AppointmentService extends Service {
   }
 
   // Cancel an appointment
-  cancel(id) {
+  async cancel(id) {
+    await this.simulateNetworkDelay();
     return this.update(id, { status: 'Cancelled' });
   }
 }

@@ -13,6 +13,8 @@ export default class AppointmentFormComponent extends Component {
   @tracked date = '';
   @tracked errors = {};
   @tracked submissionError = '';
+  @tracked isSubmitting = false;
+  @tracked submissionSuccess = '';
 
   constructor(owner, args) {
     super(owner, args);
@@ -42,8 +44,12 @@ export default class AppointmentFormComponent extends Component {
   }
 
   @action
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
+
+    if (this.isSubmitting) {
+      return;
+    }
 
     const errors = {};
 
@@ -61,10 +67,13 @@ export default class AppointmentFormComponent extends Component {
 
     this.errors = errors;
     this.submissionError = '';
+    this.submissionSuccess = '';
 
     if (Object.keys(errors).length > 0) {
       return;
     }
+
+    this.isSubmitting = true;
 
     try {
       const attributes = {
@@ -76,12 +85,12 @@ export default class AppointmentFormComponent extends Component {
       let appointment;
 
       if (this.args.appointment) {
-        appointment = this.appointmentService.update(
+        appointment = await this.appointmentService.update(
           this.args.appointment.id,
           attributes,
         );
       } else {
-        appointment = this.appointmentService.create({
+        appointment = await this.appointmentService.create({
           ...attributes,
           status: 'Upcoming',
         });
@@ -92,11 +101,14 @@ export default class AppointmentFormComponent extends Component {
         return;
       }
 
+      this.submissionSuccess = 'Appointment saved successfully.';
       this.router.transitionTo('appointment', appointment.id);
     } catch (error) {
       this.submissionError =
-        'Unable to create the appointment. Please try again.';
-      console.error('Appointment creation failed:', error);
+        'Unable to save the appointment. Please try again.';
+      console.error('Appointment save failed:', error);
+    } finally {
+      this.isSubmitting = false;
     }
   }
 
@@ -141,7 +153,8 @@ export default class AppointmentFormComponent extends Component {
             id="date"
             type="date"
             value={{this.date}}
-            {{on "input" this.updateDate}} aria-describedby="date-error"
+            {{on "input" this.updateDate}}
+            aria-describedby="date-error"
           />
           {{#if this.errors.date}}
             <p id="date-error" role="alert">{{this.errors.date}}</p>
@@ -152,7 +165,13 @@ export default class AppointmentFormComponent extends Component {
           <p role="alert">{{this.submissionError}}</p>
         {{/if}}
 
-        <button type="submit">Create appointment</button>
+        {{#if this.submissionSuccess}}
+          <p role="status">{{this.submissionSuccess}}</p>
+        {{/if}}
+
+        <button type="submit" disabled={{this.isSubmitting}}>
+          {{if this.isSubmitting "Saving..." "Save appointment"}}
+        </button>
       </form>
     </main>
   </template>
