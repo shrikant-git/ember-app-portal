@@ -6,6 +6,16 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
+// Router.map() connects a URL pattern to a route definition.
+// Ember's conventional route structure associates that route with its route class and template.
+// appointments is the route name not the URL itself. Ember resolves it to /appointments.
+// Router.map(function () {
+//   this.route('appointments');
+// });
+
 Router.map(function () {
   this.route('appointments');
+  this.route('appointment', {
+    path: '/appointments/:appointment_id',
+  });
 });
