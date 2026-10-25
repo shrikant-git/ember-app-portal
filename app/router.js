@@ -15,7 +15,17 @@ export default class Router extends EmberRouter {
 
 Router.map(function () {
   this.route('appointments');
+
+  this.route('new-appointment', {
+    path: '/appointments/new'
+  })
+
+  this.route('appointment-edit', {
+  path: '/appointments/:appointment_id/edit',
+});
+
   this.route('appointment', {
     path: '/appointments/:appointment_id',
   });
+
 });

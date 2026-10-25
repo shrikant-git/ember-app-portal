@@ -19,6 +19,8 @@
 import { pageTitle } from 'ember-page-title';
 import { LinkTo } from '@ember/routing';
 
+import AppointmentActions from '../components/appointment-actions';
+
 <template>
   {{pageTitle "Appointment Details"}}
 
@@ -41,6 +43,12 @@ import { LinkTo } from '@ember/routing';
       <dt>Status</dt>
       <dd>{{@model.status}}</dd>
     </dl>
+
+    <LinkTo @route="appointment-edit" @model={{@model.id}}>
+      Edit appointment
+    </LinkTo>
+
+    <AppointmentActions @appointment={{@model}} />
 
     <LinkTo @route="appointments">
       Back to appointments
