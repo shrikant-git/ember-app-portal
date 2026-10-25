@@ -104,8 +104,21 @@ export default class AppointmentFormComponent extends Component {
       this.submissionSuccess = 'Appointment saved successfully.';
       this.router.transitionTo('appointment', appointment.id);
     } catch (error) {
-      this.submissionError =
-        'Unable to save the appointment. Please try again.';
+      if (error.status === 400 && error.errors) {
+        this.errors = {
+          ...this.errors,
+          ...Object.fromEntries(
+            Object.entries(error.errors).map(([field, messages]) => [
+              field,
+              messages.join(' '),
+            ]),
+          ),
+        };
+      } else {
+        this.submissionError =
+          'Unable to save the appointment. Please try again.';
+      }
+
       console.error('Appointment save failed:', error);
     } finally {
       this.isSubmitting = false;
