@@ -1,28 +1,76 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'appointment-operations-portal/tests/helpers';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import AppointmentCard from 'appointment-operations-portal/components/appointment-card';
 
 module('Integration | Component | appointment-card', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Updating values is achieved using autotracking, just like in app code. For example:
-    // class State { @tracked myProperty = 0; }; const state = new State();
-    // and update using state.myProperty = 1; await rerender();
-    // Handle any actions with function myAction(val) { ... };
+  test('renders appointment details and allows marking an upcoming appointment completed', async function (assert) {
+    const appointment = {
+      id: 'appointment-1',
+      patient: 'Alex Morgan',
+      service: 'Consultation',
+      date: '2026-11-02',
+      status: 'Upcoming',
+    };
 
-    await render(<template><AppointmentCard /></template>);
+    let statusChangeArgs;
 
-    assert.dom().hasText('');
+    this.onStatusChange = (id, status) => {
+      statusChangeArgs = { id, status };
+    };
 
-    // Template block usage:
-    await render(<template>
-      <AppointmentCard>
-        template block text
-      </AppointmentCard>
-    </template>);
+    this.appointment = appointment;
 
-    assert.dom().hasText('template block text');
+    await render(
+      <template>
+        <AppointmentCard
+          @appointment={{this.appointment}}
+          @onStatusChange={{this.onStatusChange}}
+        />
+      </template>,
+    );
+
+    assert.dom('article h2').hasText('Alex Morgan');
+    assert.dom('article').includesText('Service: Consultation');
+    assert.dom('article').includesText('Date: 2026-11-02');
+    assert.dom('article').includesText('Status: Upcoming');
+    assert.dom('a').hasText('View appointment');
+    assert.dom('button').hasText('Mark completed');
+
+    await click('button');
+
+    assert.deepEqual(statusChangeArgs, {
+      id: 'appointment-1',
+      status: 'Completed',
+    });
+  });
+
+  test('does not show the mark-completed button for a completed appointment', async function (assert) {
+    this.appointment = {
+      id: 'appointment-2',
+      patient: 'Jamie Lee',
+      service: 'Follow-up',
+      date: '2026-11-03',
+      status: 'Completed',
+    };
+
+    this.onStatusChange = () => {
+      assert.step('status-change-called');
+    };
+
+    await render(
+      <template>
+        <AppointmentCard
+          @appointment={{this.appointment}}
+          @onStatusChange={{this.onStatusChange}}
+        />
+      </template>,
+    );
+
+    assert.dom('article h2').hasText('Jamie Lee');
+    assert.dom('button').doesNotExist();
+    assert.verifySteps([]);
   });
 });

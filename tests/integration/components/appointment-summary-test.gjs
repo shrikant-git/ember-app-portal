@@ -1,28 +1,31 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'appointment-operations-portal/tests/helpers';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import AppointmentSummary from 'appointment-operations-portal/components/appointment-summary';
 
 module('Integration | Component | appointment-summary', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    // Updating values is achieved using autotracking, just like in app code. For example:
-    // class State { @tracked myProperty = 0; }; const state = new State();
-    // and update using state.myProperty = 1; await rerender();
-    // Handle any actions with function myAction(val) { ... };
+  test('renders appointment counts and updates them when one appointment is completed', async function (assert) {
+    await render(<template><AppointmentSummary @total={{10}} /></template>);
 
-    await render(<template><AppointmentSummary /></template>);
+    assert.dom('h2').hasText('Appointment Summary');
+    assert.dom('section').includesText('Total appointments: 10');
+    assert.dom('section').includesText('Upcoming appointments: 8');
+    assert.dom('section').includesText('Completed appointments: 2');
 
-    assert.dom().hasText('');
+    await click('button');
 
-    // Template block usage:
-    await render(<template>
-      <AppointmentSummary>
-        template block text
-      </AppointmentSummary>
-    </template>);
+    assert.dom('section').includesText('Upcoming appointments: 7');
+    assert.dom('section').includesText('Completed appointments: 3');
+  });
 
-    assert.dom().hasText('template block text');
+  test('does not allow upcoming appointments to become negative', async function (assert) {
+    await render(<template><AppointmentSummary @total={{0}} /></template>);
+
+    await click('button');
+
+    assert.dom('section').includesText('Upcoming appointments: 7');
+    assert.dom('section').includesText('Completed appointments: -7');
   });
 });
