@@ -1,26 +1,33 @@
-name: CI
+name: CI  #This gives the workflow its display name.
 
-on:
-  push:
+on:  # when should the workflow run
+# This defines the workflow's triggers, sometimes called events.
+  push: # When a commit is pushed to main, master, or develop, GitHub starts the workflow.
     branches:
       - main
       - master
       - develop
-  pull_request:
+  pull_request: #When a pull request is opened or updated, GitHub can run the workflow to validate the proposed changes before merging.
 
-concurrency:
+concurrency: # avoid unnecessary duplicate runs
   group: ci-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
-permissions:
+permissions: # what can the workflow access?
+# This limits the workflow's default GITHUB_TOKEN permissions to reading repository contents.
+# Your current workflow only needs to check out the code and run commands. It doesn't need to push commits or modify issues, so read-only access is appropriate.
   contents: read
 
+# Below workflow defines two jobs
+# By default, these two jobs run independently and can run in parallel. Each gets its own runner, so each job checks out the repository and installs dependencies separately.
 jobs:
+# A job is a collection of steps executed on a runner.
   quality:
     name: Lint and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+    # This is a step that uses a reusable GitHub Action called actions/checkout
       - name: Check out repository
         uses: actions/checkout@v6
 
@@ -36,9 +43,11 @@ jobs:
       - name: Lint and format check
         run: npm run lint
 
+      # This is also a step, but it runs a shell command directly instead of invoking a reusable action.
       - name: Run tests
         run: npm test
 
+# production-build job has its own setup, checkout, Node setup, and dependency installation, then runs npm run build. It is a separate job, not a continuation of the quality job on the same machine.
   production-build:
     name: Production build
     runs-on: ubuntu-latest
