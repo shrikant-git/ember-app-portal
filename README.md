@@ -11,7 +11,9 @@ An Ember.js application for managing appointments, built with modern Glimmer com
 - Route protection and role-aware UI.
 - Form validation, loading states, and error handling.
 
-**Current limitations:** Authentication is mocked, and appointment data is maintained locally in memory. This application is not connected to a production backend. A real deployment requires server-side authentication, authorization, and persistent API-backed data.
+**Current limitations:**
+
+Authentication is mocked, and appointment data is maintained locally in memory. This application is not connected to a production backend. A real deployment requires server-side authentication, authorization, and persistent API-backed data.
 
 ## Prerequisites
 
