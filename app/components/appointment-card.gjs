@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 
 export default class AppointmentCardComponent extends Component {

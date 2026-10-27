@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
-import AppointmentCard from './appointment-card';
+import { LinkTo } from '@ember/routing';
 
+import AppointmentCard from './appointment-card';
 import { service } from '@ember/service';
 
 export default class AppointmentsPageComponent extends Component {
   @service appointmentService;
+  @service session;
 
   get filteredAppointments() {
     const query = (this.args.searchQuery ?? '').trim().toLowerCase();
@@ -41,6 +43,9 @@ export default class AppointmentsPageComponent extends Component {
   <template>
     <main>
       <h1>Appointments</h1>
+      {{#if this.session.canManageAppointments}}
+        <LinkTo @route="new-appointment">New appointment</LinkTo>
+      {{/if}}
       <p>Search and filter patient appointments.</p>
 
       <p>Search query: {{@searchQuery}}</p>

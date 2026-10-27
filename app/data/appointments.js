@@ -1,4 +1,3 @@
-
 export const appointments = [
   {
     id: 1,

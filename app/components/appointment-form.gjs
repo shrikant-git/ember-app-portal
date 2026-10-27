@@ -167,6 +167,7 @@ export default class AppointmentFormComponent extends Component {
             type="date"
             value={{this.date}}
             {{on "input" this.updateDate}}
+            {{!-- aria-invalid={{if this.errors.date "true" "false"}} --}}
             aria-describedby="date-error"
           />
           {{#if this.errors.date}}

@@ -7,6 +7,7 @@ import { on } from '@ember/modifier';
 export default class AppointmentActionsComponent extends Component {
   @service appointmentService;
   @service router;
+  @service session;
 
   @tracked isCancelling = false;
   @tracked cancelError = '';
@@ -47,9 +48,10 @@ export default class AppointmentActionsComponent extends Component {
 
   <template>
     <section aria-label="Appointment actions">
+
       {{#if this.isCancelled}}
         <p role="status">This appointment has been cancelled.</p>
-      {{else}}
+      {{else if this.session.canManageAppointments}}
         <button
           type="button"
           disabled={{this.isCancelling}}
@@ -57,11 +59,14 @@ export default class AppointmentActionsComponent extends Component {
         >
           {{if this.isCancelling "Cancelling..." "Cancel appointment"}}
         </button>
+      {{else}}
+        <p>You have read-only access to appointments.</p>
       {{/if}}
 
       {{#if this.cancelError}}
         <p role="alert">{{this.cancelError}}</p>
       {{/if}}
+
     </section>
   </template>
 }
