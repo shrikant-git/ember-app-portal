@@ -1,18 +1,15 @@
-import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-export default class AppointmentEditRoute extends Route {
+import AuthenticatedRoute from './authenticated';
+
+export default class AppointmentEditRoute extends AuthenticatedRoute {
   @service appointmentService;
 
   model(params) {
-    const appointment = this.appointmentService.getById(
-      params.appointment_id,
-    );
+    const appointment = this.appointmentService.getById(params.appointment_id);
 
     if (!appointment) {
-      throw new Error(
-        `Appointment ${params.appointment_id} was not found`,
-      );
+      throw new Error(`Appointment ${params.appointment_id} was not found`);
     }
 
     return appointment;

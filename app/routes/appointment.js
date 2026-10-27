@@ -15,33 +15,24 @@
 //   }
 // }
 
-
-
-
-
-import Route from '@ember/routing/route';
+// import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-export default class AppointmentRoute extends Route {
+import AuthenticatedRoute from './authenticated';
+
+export default class AppointmentsRoute extends AuthenticatedRoute {
   @service appointmentService;
 
   model(params) {
-    const appointment = this.appointmentService.getById(
-      params.appointment_id,
-    );
+    const appointment = this.appointmentService.getById(params.appointment_id);
 
     if (!appointment) {
-      throw new Error(
-        `Appointment ${params.appointment_id} was not found`,
-      );
+      throw new Error(`Appointment ${params.appointment_id} was not found`);
     }
 
     return appointment;
   }
 }
-
-
-
 
 // import Route from '@ember/routing/route';
 // import { fetchPost } from '../data/api';
@@ -63,7 +54,6 @@ export default class AppointmentRoute extends Route {
 //     console.log('4. afterModel: resolved record', model.id);
 //   }
 // }
-
 
 // import Route from '@ember/routing/route';
 // import { appointments } from '../data/appointments';

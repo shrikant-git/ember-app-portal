@@ -1,3 +1,7 @@
-import Route from '@ember/routing/route';
+// import Route from '@ember/routing/route';
 
-export default class AppointmentsRoute extends Route {}
+import AuthenticatedRoute from './authenticated';
+
+export default class AppointmentsRoute extends AuthenticatedRoute {}
+
+// export default class AppointmentsRoute extends Route {}

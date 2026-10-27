@@ -1,57 +1,50 @@
-// import { LinkTo } from '@ember/routing';
-// import { pageTitle } from 'ember-page-title';
-
-// <template>
-//   {{pageTitle "Demo Record Details"}}
-
-//   <main>
-//     <h1>Demo Record Details</h1>
-
-//     <p>Record ID: {{@model.id}}</p>
-//     <p>User ID: {{@model.userId}}</p>
-//     <h2>{{@model.title}}</h2>
-//     <p>{{@model.body}}</p>
-
-//     <LinkTo @route="appointments">Back to appointments</LinkTo>
-//   </main>
-// </template>
-
+import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import { pageTitle } from 'ember-page-title';
 import { LinkTo } from '@ember/routing';
-
 import AppointmentActions from '../components/appointment-actions';
 
-<template>
-  {{pageTitle "Appointment Details"}}
+export default class AppointmentDetailsComponent extends Component {
+  @service session;
 
-  <main>
-    <h1>Appointment Details</h1>
+  <template>
+    {{pageTitle "Appointment Details"}}
 
-    <dl>
-      <dt>Appointment ID</dt>
-      <dd>{{@model.id}}</dd>
+    <main>
+      <h1>Appointment Details</h1>
 
-      <dt>Patient</dt>
-      <dd>{{@model.patient}}</dd>
+      <dl>
+        <dt>Appointment ID</dt>
+        <dd>{{@model.id}}</dd>
 
-      <dt>Service</dt>
-      <dd>{{@model.service}}</dd>
+        <dt>Patient</dt>
+        <dd>{{@model.patient}}</dd>
 
-      <dt>Date</dt>
-      <dd>{{@model.date}}</dd>
+        <dt>Service</dt>
+        <dd>{{@model.service}}</dd>
 
-      <dt>Status</dt>
-      <dd>{{@model.status}}</dd>
-    </dl>
+        <dt>Date</dt>
+        <dd>{{@model.date}}</dd>
 
-    <LinkTo @route="appointment-edit" @model={{@model.id}}>
-      Edit appointment
-    </LinkTo>
+        <dt>Status</dt>
+        <dd>{{@model.status}}</dd>
+      </dl>
 
-    <AppointmentActions @appointment={{@model}} />
+      {{#if this.session.canManageAppointments}}
+        <LinkTo @route="appointment-edit" @model={{@model.id}}>
+          Edit appointment
+        </LinkTo>
 
-    <LinkTo @route="appointments">
-      Back to appointments
-    </LinkTo>
-  </main>
-</template>
+        <AppointmentActions @appointment={{@model}} />
+      {{else}}
+        <p>You have read-only access to appointments.</p>
+      {{/if}}
+
+      <p>
+        <LinkTo @route="appointments">
+          Back to appointments
+        </LinkTo>
+      </p>
+    </main>
+  </template>
+}
