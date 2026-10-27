@@ -1,54 +1,143 @@
-# appointment-operations-portal
+# Appointment Operations Portal
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+An Ember.js application for managing appointments, built with modern Glimmer components, Vite, and Embroider. This project is also used to practise production-oriented frontend engineering, testing, and repository standards.
+
+## Current capabilities
+
+- View and search appointments.
+- Filter appointments by status.
+- Create, edit, and cancel appointments.
+- Mock login and session management.
+- Route protection and role-aware UI.
+- Form validation, loading states, and error handling.
+
+**Current limitations:** Authentication is mocked, and appointment data is maintained locally in memory. This application is not connected to a production backend. A real deployment requires server-side authentication, authorization, and persistent API-backed data.
 
 ## Prerequisites
 
-You will need the following things properly installed on your computer.
-
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) (with npm)
-- [Google Chrome](https://google.com/chrome/)
+- [Node.js](https://nodejs.org/) 22.x
+- npm
+- [Google Chrome](https://www.google.com/chrome/) or another supported browser
 
-## Installation
+The `.nvmrc` file specifies the Node.js major version used by the project.
 
-- `git clone <repository-url>` this repository
-- `cd appointment-operations-portal`
-- `npm install`
+## Getting started
 
-## Running / Development
+Clone the repository and enter the project directory:
 
-- `npm run start`
-- Visit your app at [http://localhost:4200](http://localhost:4200).
-- Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+```bash
+git clone <repository-url>
+cd appointment-operations-portal
+```
 
-### Code Generators
+Install dependencies:
 
-Make use of the many generators for code, try `npm exec ember help generate` for more details
+```bash
+npm ci
+```
 
-### Running Tests
+If you are setting up a new local clone, verify that Git hooks are installed and active after dependency installation.
 
-- `npm run test`
+## Development
 
-### Linting
+Start the Vite development server:
 
-- `npm run lint`
-- `npm run lint:fix`
+```bash
+npm run start
+```
 
-### Building
+Open [http://localhost:4200/](http://localhost:4200/).
 
-- `npm exec vite build --mode development` (development)
-- `npm run build` (production)
+The test runner is available through:
 
-### Deploying
+```bash
+npm run test
+```
 
-Specify what it takes to deploy your app.
+## Quality checks
 
-## Further Reading / Useful Links
+Run the configured lint and formatting checks:
 
-- [ember.js](https://emberjs.com/)
-- [Vite](https://vite.dev)
-- Development Browser Extensions
-  - [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  - [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+```bash
+npm run lint
+```
+
+Apply automatic lint fixes and formatting where supported:
+
+```bash
+npm run lint:fix
+```
+
+Format files across the project:
+
+```bash
+npm run format
+```
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+The production output is generated in `dist/`.
+
+## Code quality and Git workflow
+
+This repository uses:
+
+- **ESLint** for JavaScript linting.
+- **Ember Template Lint** for template checks.
+- **Stylelint** for CSS linting.
+- **Prettier** for consistent formatting.
+- **Husky** for Git hooks.
+- **lint-staged** to format matching staged files before commits.
+- **Conventional Commit-style messages** enforced by the commit-message hook.
+
+Examples of accepted commit messages:
+
+```text
+feat(appointments): add status filter
+fix(auth): preserve intended route
+test(appointments): cover cancellation
+docs: update setup instructions
+ci: run production build
+```
+
+## Continuous integration
+
+The GitHub Actions workflow in `.github/workflows/ci.yml` is configured to run on pull requests and pushes to the configured branches.
+
+It runs:
+
+1. Lint and formatting checks.
+2. Automated tests.
+3. A production build.
+
+The workflow must be executed in a remote GitHub repository before its remote status can be verified.
+
+## Project structure
+
+- `app/routes/` — route definitions and route-level behavior.
+- `app/controllers/` — controller state and URL-related behavior where applicable.
+- `app/components/` — reusable UI components.
+- `app/templates/` — route templates and page composition.
+- `app/services/` — shared application services.
+- `tests/` — automated tests.
+- `.husky/` — local Git hook scripts.
+- `.github/workflows/` — CI configuration.
+
+## Further reading
+
+- [Ember.js](https://emberjs.com/)
+- [Vite](https://vite.dev/)
+- [Embroider](https://github.com/embroider-build/embroider)
+- [Prettier](https://prettier.io/)
+- [Husky](https://typicode.github.io/husky/)
