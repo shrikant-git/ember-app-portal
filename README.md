@@ -27,7 +27,7 @@ The `.nvmrc` file specifies the Node.js major version used by the project.
 Clone the repository and enter the project directory:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/shrikant-git/ember-app-portal.git
 cd appointment-operations-portal
 ```
 
