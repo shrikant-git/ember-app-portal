@@ -93,6 +93,14 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.{js,mjs,cjs,ts,tsx,gjs,json,md,yml,yaml,css}": "prettier --write"
+    "*.{js,mjs,cjs,ts,tsx,gjs}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.css": [
+      "prettier --write",
+      "stylelint --fix"
+    ],
+    "*.{json,md,yml,yaml}": "prettier --write"
   }
 }
