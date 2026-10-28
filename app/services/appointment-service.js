@@ -10,7 +10,6 @@ export default class AppointmentService extends Service {
 
   // Read all appointments
   getAll() {
-    console.log(ciIntentionalUndefinedVariable);
     return this.appointments;
   }
 
